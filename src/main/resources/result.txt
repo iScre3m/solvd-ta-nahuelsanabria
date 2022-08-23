@@ -1,0 +1,1 @@
+Amount of Unique words found in the file : 42 
