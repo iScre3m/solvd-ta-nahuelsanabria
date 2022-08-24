@@ -23,8 +23,7 @@ public class NewsPaper extends Publication implements IBuyable {
                 ", editorial: '" + editorial + '\'' +
                 ", pages: " + pages +
                 ", " + available +
-                ", genre: " + genre +
-                ", id: " + id;
+                ", genre: " + genre;
     }
 
     @Override

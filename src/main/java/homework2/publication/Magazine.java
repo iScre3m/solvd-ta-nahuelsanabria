@@ -44,8 +44,7 @@ public class Magazine extends Publication {
                 ", editorial: '" + editorial + '\'' +
                 ", pages: " + pages +
                 ", " + available +
-                ", genre: " + genre +
-                ", id: " + id;
+                ", genre: " + genre;
     }
 
 }

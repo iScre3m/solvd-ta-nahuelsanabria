@@ -11,6 +11,10 @@ public class CustomLinkedList<T> {
 
     private Node<T> head;
 
+    public Node<T> getHead() {
+        return head;
+    }
+
     public void insert(T data) {
 
         Node<T> newNode = new Node<T>(data);
@@ -60,7 +64,6 @@ public class CustomLinkedList<T> {
             logger.info(currentNode.getData());
         }
     }
-
 
     public int size() {
         int counterNodes = 0;
