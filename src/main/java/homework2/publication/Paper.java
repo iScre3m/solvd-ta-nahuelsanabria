@@ -1,7 +1,9 @@
 package homework2.publication;
 
 
-public class Paper extends Publication {
+import homework2.interfaces.ICopyable;
+
+public class Paper extends Publication implements ICopyable {
 
     private final String author;
 
@@ -12,6 +14,15 @@ public class Paper extends Publication {
 
     public String getAuthor() {
         return author;
+    }
+
+    @Override
+    public double calculateCopyPrice(int amountOfCopies, PriceCopyColor priceCopyColor) {
+        int countLetters = 0;
+        for (int i = 0; i < this.content.length(); i++) {
+            countLetters++;
+        }
+        return priceCopyColor.addPriceColor(pricePerPageCopy * this.pages * countLetters * 1.05);
     }
 
 }

@@ -27,7 +27,7 @@ public final class Customer extends Person {
         return bill;
     }
 
-    public void increaseBill(Publication publication, int copies) throws NumberTooBigException, NoNegativeNumberException, NoZeroNumberException {
+    public void increaseBill(Publication publication, int copies, PaymentMethod paymentMethod) throws NumberTooBigException, NoNegativeNumberException, NoZeroNumberException {
         double discount = 1.00;
         if (copies > 10) {
             throw new NumberTooBigException("Can not make more than 10 copies");
@@ -42,10 +42,13 @@ public final class Customer extends Person {
         } else if (publication instanceof NewsPaper) {
             bill += ((NewsPaper) publication).calculateBuyPrice(copies) * discount;
         } else if (publication instanceof Pamphlet) {
-            bill += ((Pamphlet) publication).calculateCopyPrice(copies) * discount;
+            bill += ((Pamphlet) publication).calculateCopyPrice(copies, PriceCopyColor.COLOR) * discount;
         } else if (publication instanceof ComicBook) {
             bill += ((ComicBook) publication).calculateBuyPrice(copies);
+        } else if (publication instanceof Paper) {
+            bill += ((Paper) publication).calculateCopyPrice(copies, PriceCopyColor.GRAYSCALE);
         }
+        bill = paymentMethod.addPricePaymentMethod(bill);
     }
 
     public Genre getPreferences() {

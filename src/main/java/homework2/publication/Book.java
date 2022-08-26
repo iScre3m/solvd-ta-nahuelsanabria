@@ -26,8 +26,7 @@ public class Book extends Publication implements IBuyable, IDiscount {
                 ", author: '" + author + '\'' +
                 ", pages: " + pages +
                 ", " + available +
-                ", genre: " + genre +
-                ", id: " + id;
+                ", genre: " + genre;
     }
 
     @Override

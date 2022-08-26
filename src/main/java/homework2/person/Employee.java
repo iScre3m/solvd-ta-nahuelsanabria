@@ -4,13 +4,16 @@ import homework2.Library;
 import homework2.exceptions.InvalidNumberException;
 import homework2.exceptions.NoPublicationsFoundException;
 import homework2.publication.Genre;
+import homework2.publication.PaymentMethod;
 import homework2.publication.Publication;
+import homework2.interfaces.CopiesCounter;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 public final class Employee extends Person {
 
@@ -57,9 +60,10 @@ public final class Employee extends Person {
         logger.info("Publication chosen by " + customer.getName() + " is: " + publicationChosenCustomer);
 
         try {
-            customer.increaseBill(publicationChosenCustomer, 3);
+            customer.increaseBill(publicationChosenCustomer, getCopiesAmount(copies -> copies, customer), PaymentMethod.CASH);
         } catch (InvalidNumberException e) {
             logger.error(e);
+            customer.increaseBill(publicationChosenCustomer, 1, PaymentMethod.CASH);
         }
 
         logger.info("The current bill of " + customer.getName() + " is: " + String.format("$ %.2f", customer.getBill()));
@@ -76,6 +80,18 @@ public final class Employee extends Person {
 
     public void checkSamePublication(Publication publication, Publication publication2) {
         publication.isSamePublication(publication2);
+    }
+
+    public int getCopiesAmount(CopiesCounter copiesCounter, Customer customer){
+
+        Scanner sc = new Scanner(System.in);
+        logger.info(name +" - How many copies do you want " + customer.getName() + " ?");
+
+        return copiesCounter.askCopiesAmount(Integer.parseInt(sc.nextLine()));
+    }
+    public double askPaymentMethod(){
+
+        return 0.0;
     }
 
 }

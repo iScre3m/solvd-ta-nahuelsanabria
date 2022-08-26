@@ -33,8 +33,6 @@ public class App {
         customers.insertHead(customer3);
 
         customers.display();
-
-
         logger.info("Amount of customers on the store = " + customers.size());
         customers.display();
 
@@ -57,6 +55,7 @@ public class App {
 
         library.employeeAttends(employee1, customers);
 
+        library.DisplayCounterOfPublications(publication -> publication.getPages() > 100 );
 
     }
 }

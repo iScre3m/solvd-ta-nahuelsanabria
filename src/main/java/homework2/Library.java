@@ -3,6 +3,7 @@ package homework2;
 import homework2.collections.CustomLinkedList;
 import homework2.collections.Node;
 import homework2.exceptions.DuplicatedPublicationException;
+import homework2.interfaces.PublicationProcessor;
 import homework2.person.Customer;
 import homework2.person.Employee;
 import homework2.publication.*;
@@ -47,6 +48,14 @@ public class Library {
             }
         }
         logger.info("sales of " + employee.getName() + String.format(" : $ %.2f", salesEmployee.get(employee.getName())));
+    }
+
+
+    public void DisplayCounterOfPublications(PublicationProcessor publicationProcessor){
+        for(Publication p: publications){
+            if (publicationProcessor.processPublication(p))
+                logger.info("Publication: " + p.getTitle() + " " + p.getPages());
+        }
     }
 //
 //        try {

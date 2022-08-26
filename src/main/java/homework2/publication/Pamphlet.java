@@ -10,12 +10,12 @@ public class Pamphlet extends Publication implements ICopyable, IDiscount {
 
 
     @Override
-    public double calculateCopyPrice(int amountOfCopies) {
+    public double calculateCopyPrice(int amountOfCopies, PriceCopyColor priceCopyColor) {
         int countLetters = 0;
         for (int i = 0; i < this.content.length(); i++) {
             countLetters++;
         }
-        return pricePerPageCopy * this.pages * countLetters * 1.05;
+        return priceCopyColor.addPriceColor(pricePerPageCopy * this.pages * countLetters * 1.05);
     }
 
     @Override

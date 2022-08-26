@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class Publication {
 
-    private Logger logger = LogManager.getLogger(Library.class.getName());
+    private final Logger logger = LogManager.getLogger(Library.class.getName());
     protected int id;
     protected String title;
     protected int pages;

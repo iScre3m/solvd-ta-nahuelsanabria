@@ -28,4 +28,13 @@ public class ComicBook extends Publication implements IBuyable {
         this.setAvailable(false);
         return 1.35 * this.pages * countLetters * amountOfCopies;
     }
+
+    @Override
+    public String toString() {
+        return "ComicBook '" + title +
+                "' editorial: '" + editorial + '\'' +
+                ", pages: " + pages +
+                "," + available +
+                ", genre: " + genre;
+    }
 }
