@@ -23,6 +23,7 @@ public class App {
         Pamphlet pamphlet1 = new Pamphlet("Rehab", 3, true, Genre.RELIGION, "We take your problems seriously, come to our classes");
         ComicBook comicBook1 = new ComicBook("Flash", "DC Comics", 30, true, Genre.FANTASY, "Sorry I am late, th-there is hope, Time to save the world");
         Employee employee1 = new Employee("Olga");
+        Employee employee2 = new Employee("Martin");
         Customer customer1 = new Customer("Charles", Genre.WAR);
         Customer customer2 = new Customer("Robin", Genre.MYSTERY);
         Customer customer3 = new Customer("Matthew", Genre.FANTASY);
@@ -53,9 +54,13 @@ public class App {
 
         library.createLargestPublications();
 
-        library.employeeAttends(employee1, customers);
+        library.displayCounterOfPublications(publication -> publication.getPages() > 100 );
 
-        library.DisplayCounterOfPublications(publication -> publication.getPages() > 100 );
+        library.verifySamePublication(employee1, book1, book2);
 
+        library.employeeAttend(employee1, customer1);
+        library.employeeAttend(employee1, customer2);
+        library.employeeAttend(employee2, customer3);
+        library.displaySalesOfEmployees();
     }
 }

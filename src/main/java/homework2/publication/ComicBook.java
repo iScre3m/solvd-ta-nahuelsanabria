@@ -11,11 +11,6 @@ public class ComicBook extends Publication implements IBuyable {
         this.editorial = editorial;
     }
 
-    public String getEditorial() {
-        return editorial;
-    }
-
-
     @Override
     public double calculateBuyPrice(int amountOfCopies) {
         int countLetters = 0;

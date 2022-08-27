@@ -14,8 +14,10 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
-public final class Employee extends Person {
+
+public final class Employee extends Person implements BiFunction<PaymentMethod, Customer, PaymentMethod>{
 
     private static final Logger logger = LogManager.getLogger(Library.class.getName());
 
@@ -60,10 +62,10 @@ public final class Employee extends Person {
         logger.info("Publication chosen by " + customer.getName() + " is: " + publicationChosenCustomer);
 
         try {
-            customer.increaseBill(publicationChosenCustomer, getCopiesAmount(copies -> copies, customer), PaymentMethod.CASH);
+            customer.increaseBill(publicationChosenCustomer, getCopiesAmount(copies -> copies, customer), apply(PaymentMethod.CASH,customer));
         } catch (InvalidNumberException e) {
             logger.error(e);
-            customer.increaseBill(publicationChosenCustomer, 1, PaymentMethod.CASH);
+            serveCustomer(customer, publications);
         }
 
         logger.info("The current bill of " + customer.getName() + " is: " + String.format("$ %.2f", customer.getBill()));
@@ -84,14 +86,39 @@ public final class Employee extends Person {
 
     public int getCopiesAmount(CopiesCounter copiesCounter, Customer customer){
 
+        int copies = 0;
         Scanner sc = new Scanner(System.in);
-        logger.info(name +" - How many copies do you want " + customer.getName() + " ?");
-
-        return copiesCounter.askCopiesAmount(Integer.parseInt(sc.nextLine()));
+        logger.log(Level.getLevel("DIALOG"),name +" - How many copies do you need " + customer.getName() + " ?");
+        try{
+            copies = copiesCounter.askCopiesAmount(Integer.parseInt(sc.nextLine()));
+        }catch (NumberFormatException e){
+            logger.warn(e);
+            getCopiesAmount(copiesCounter, customer);
+        }
+        logger.log(Level.getLevel("DIALOG"),customer.getName() + " - I need " + copies + " copies");
+        return copies;
     }
-    public double askPaymentMethod(){
 
-        return 0.0;
+    @Override
+    public PaymentMethod apply(PaymentMethod paymentMethod, Customer customer) {
+
+        Scanner scan = new Scanner(System.in);
+        logger.log(Level.getLevel("DIALOG"),name + " - How do you wish to pay " + customer.getName() + " ? (CASH / CREDIT / DEBIT)");
+        try{
+            String userInput = scan.nextLine();
+            if (userInput.equalsIgnoreCase("credit")){
+                paymentMethod = PaymentMethod.CREDIT;
+            } else if (userInput.equalsIgnoreCase("debit")) {
+                paymentMethod = PaymentMethod.DEBIT;
+            } else if(userInput.equalsIgnoreCase("cash")){
+                paymentMethod = PaymentMethod.CASH;
+            }
+        }catch (NumberFormatException e){
+            logger.warn(e);
+            apply(paymentMethod, customer);
+        }
+
+        logger.log(Level.getLevel("DIALOG"),customer.getName() + " - I will pay with " + paymentMethod);
+        return paymentMethod;
     }
-
 }

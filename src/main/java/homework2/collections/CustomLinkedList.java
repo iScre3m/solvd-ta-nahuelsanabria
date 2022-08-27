@@ -17,7 +17,7 @@ public class CustomLinkedList<T> {
 
     public void insert(T data) {
 
-        Node<T> newNode = new Node<T>(data);
+        Node<T> newNode = new Node<>(data);
 
         if (this.head == null) {
             head = newNode;
@@ -31,13 +31,13 @@ public class CustomLinkedList<T> {
     }
 
     public void insertHead(T data) {
-        Node<T> newNode = new Node<T>(data);
+        Node<T> newNode = new Node<>(data);
         newNode.setNextNode(head);
         head = newNode;
     }
 
     public void insertAt(int index, T data) {
-        Node<T> nodeToBeInserted = new Node<T>(data);
+        Node<T> nodeToBeInserted = new Node<>(data);
         Node<T> node = head;
         for (int i = 0; i < index - 1; i++) {
             node = node.getNextNode();

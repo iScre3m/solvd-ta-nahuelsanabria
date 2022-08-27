@@ -44,9 +44,7 @@ public class Book extends Publication implements IBuyable, IDiscount {
         }
         if (obj instanceof Book) {
             Book book = (Book) obj;
-            if (Objects.equals(book.getTitle(), this.title) && Objects.equals(book.getAuthor(), this.author) && (book.getPages() == this.pages) && (book.getGenre() == this.genre)) {
-                return true;
-            }
+            return Objects.equals(book.getTitle(), this.title) && Objects.equals(book.getAuthor(), this.author) && (book.getPages() == this.pages) && (book.getGenre() == this.genre);
         }
         return false;
     }

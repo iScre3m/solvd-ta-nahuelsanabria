@@ -13,7 +13,7 @@ import java.util.List;
 
 public final class Customer extends Person {
 
-    private static final Logger logger = LogManager.getLogger(Library.class.getName());
+    private final Logger logger = LogManager.getLogger(Library.class.getName());
 
     private Genre preferences;
     private double bill = 0;

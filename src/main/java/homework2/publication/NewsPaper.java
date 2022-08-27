@@ -41,9 +41,7 @@ public class NewsPaper extends Publication implements IBuyable {
         }
         if (obj instanceof NewsPaper) {
             NewsPaper newsPaper = (NewsPaper) obj;
-            if (Objects.equals(newsPaper.getTitle(), this.title) && Objects.equals(newsPaper.getEditorial(), this.editorial) && (newsPaper.getPages() == this.pages) && (newsPaper.getGenre() == this.genre)) {
-                return true;
-            }
+            return Objects.equals(newsPaper.getTitle(), this.title) && Objects.equals(newsPaper.getEditorial(), this.editorial) && (newsPaper.getPages() == this.pages) && (newsPaper.getGenre() == this.genre);
         }
         return false;
     }

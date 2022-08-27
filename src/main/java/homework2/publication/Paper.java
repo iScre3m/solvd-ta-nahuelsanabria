@@ -12,9 +12,6 @@ public class Paper extends Publication implements ICopyable {
         this.author = author;
     }
 
-    public String getAuthor() {
-        return author;
-    }
 
     @Override
     public double calculateCopyPrice(int amountOfCopies, PriceCopyColor priceCopyColor) {
@@ -25,4 +22,12 @@ public class Paper extends Publication implements ICopyable {
         return priceCopyColor.addPriceColor(pricePerPageCopy * this.pages * countLetters * 1.05);
     }
 
+    @Override
+    public String toString() {
+        return "Paper '" + title + '\'' +
+                "author='" + author + '\'' +
+                ", pages=" + pages +
+                ", " + available +
+                ", genre=" + genre;
+    }
 }
