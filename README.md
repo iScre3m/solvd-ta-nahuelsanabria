@@ -87,3 +87,43 @@ Homework 8:
 - Use at least 5 different methods from StringUtils and 5 from FileUtils. 
 - To process some strings and some files on your local computer.
 - Put code for this task into separate runner class with main() method
+
+Homework 9:
+
+1. Use at least 3 lambda functions from the java.util.function package in your hierarchy.
+
+2. Create 2 custom Lambda functions (your own functional interfaces) with generics and use them in your hierarchy.
+
+3. Create 3 complex Enums(with fields, methods, blocks) and use them in your hierarchy.
+
+Homework 10:
+
+1. Add 5 collection streaming in the hierarchy with terminal and non-terminal operations in your hierarchy.
+
+2. Using reflection extract information(modifiers, return types, parameters, etc) about fields, constructors, methods. 
+   Create object of your hierarchy class and call method using the only reflection.
+
+Homework 11:
+
+1. Create Connection Pool. Use collection (or map) for storing of Connection details from “java.util.concurrent” package. Connection class may be mocked. The pool should be threadsafe and lazy initialized.
+
+2. Initialize your Pool instance with maximum 5 threads.
+
+3. Load your Connection Pool using 2 separate threads (1 Runnable instance and 1 Thread instance) and java Thread Pool (of 5 threads). So that you’ll have 7 threads in total. 5 threads should be able to get the connection from your Pool. 2 Threads should wait for the next available connection. The program should wait as well.
+
+4. Implement 4th part but with Future and CompletionStage.
+
+List of classes you’ll need:
+
+Connection (simple class that will represent instance of DB connection)
+
+ConnectionPool
+- limit of threads
+- collection/map for current connections state
+- connect() - will return Connection object OR throw Exception saying about unavailable connections
+- disconnect() - will release connection from storage
+
+
+ClientsRunner
+- concurrent threads holder which uses ConnectionPool and calls connect()/disconnect() methods of it in threads
+

@@ -53,6 +53,7 @@ public class App {
         library.addPublication(comicBook1);
 
         library.createLargestPublications();
+        library.displayLargestPublications();
 
         library.displayCounterOfPublications(publication -> publication.getPages() > 100 );
 
@@ -64,5 +65,9 @@ public class App {
         library.displaySalesOfEmployees();
         library.displayBestEmployee();
         library.displaySumOfSales();
+
+        library.restock(employee1);
+        library.displayPublications();
+
     }
 }

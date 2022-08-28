@@ -9,24 +9,24 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Library {
 
     private final Logger logger = LogManager.getLogger(Library.class.getName());
 
     private final List<Publication> publications = new Vector<>();
-    private final List<Publication> largestPublications = new ArrayList<>();
+    private List<Publication> largestPublications = new ArrayList<>();
     private final HashMap<String, Double> salesEmployee = new HashMap<>();
     public void addPublication(Publication publication){
         publications.add(publication);
     }
 
-    public void createLargestPublications() {
-        largestPublications.addAll(publications);
-        largestPublications.sort((a, b) -> Integer.compare(b.getPages(), a.getPages()));
-        for (int i = largestPublications.size(); i > 5; i--) {
-            largestPublications.remove(largestPublications.size() - 1);
-        }
+    public void createLargestPublications(){
+        largestPublications = publications.stream().sorted(Comparator.comparingInt(Publication::getPages).reversed()).limit(5).collect(Collectors.toList());
+    }
+    public void displayLargestPublications(){
+        largestPublications.forEach(logger::info);
     }
 
     public void employeeAttend(Employee employee, Customer customer){
@@ -67,5 +67,16 @@ public class Library {
     public void displaySumOfSales(){
         logger.info("The sum of the sales is " +  String.format(" : $ %.2f", sumOfSales()));
     }
+
+    public void restock(Employee employee){
+        employee.restockPublications(publications);
+    }
+
+    public void displayPublications(){
+        for (Publication p: publications) {
+            logger.info(p);
+        }
+    }
+
 
 }

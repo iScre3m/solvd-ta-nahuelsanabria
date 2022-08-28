@@ -10,11 +10,14 @@ import homework2.interfaces.CopiesCounter;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 
 public final class Employee extends Person implements BiFunction<PaymentMethod, Customer, PaymentMethod>{
@@ -121,4 +124,14 @@ public final class Employee extends Person implements BiFunction<PaymentMethod, 
         logger.log(Level.getLevel("DIALOG"),customer.getName() + " - I will pay with " + paymentMethod);
         return paymentMethod;
     }
+
+    public void restockPublications(List<Publication> publications){
+        Predicate<Boolean> biPredicate = (aBoolean) -> aBoolean.equals(false);
+        for (Publication p: publications) {
+            if (biPredicate.test(p.getAvailable())){
+                p.setAvailable(true);
+            }
+        }
+    }
+
 }

@@ -26,6 +26,7 @@ public class ComicBook extends Publication implements IBuyable {
 
     @Override
     public String toString() {
+        String available = (this.available) ? "Available" : "Not Available";
         return "ComicBook '" + title +
                 "' editorial: '" + editorial + '\'' +
                 ", pages: " + pages +
