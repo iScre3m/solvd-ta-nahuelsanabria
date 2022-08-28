@@ -8,10 +8,7 @@ import homework2.publication.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 public class Library {
 
@@ -32,27 +29,11 @@ public class Library {
         }
     }
 
-//    public void employeeAttends(Employee employee, CustomLinkedList<Customer> customers){
-//
-//        salesEmployee.put(employee.getName(), 0.0);
-//        if (customers.getHead() != null) {
-//            var node = new Object() {
-//                Node<Customer> currentNode = customers.getHead();
-//            };
-//            while (node.currentNode != null) {
-//                employee.serveCustomer(node.currentNode.getData(), publications);
-//                salesEmployee.computeIfPresent(employee.getName(), (k, v) -> v + node.currentNode.getData().getBill());
-//                node.currentNode = node.currentNode.getNextNode();
-//            }
-//        }
-//        logger.info("sales of " + employee.getName() + String.format(" : $ %.2f", salesEmployee.get(employee.getName())));
-//    }
-
     public void employeeAttend(Employee employee, Customer customer){
         salesEmployee.putIfAbsent(employee.getName(), 0.0);
         employee.serveCustomer(customer, publications);
-        salesEmployee.computeIfPresent(employee.getName(), (k,v)-> v + customer.getBill());
-        logger.info("sales of " + employee.getName() + String.format(" : $ %.2f", salesEmployee.get(employee.getName())));
+        salesEmployee.computeIfPresent(employee.getName(), (k,v) -> v + customer.getBill());
+        logger.info("Current sales of " + employee.getName() + String.format(" : $ %.2f", salesEmployee.get(employee.getName())));
     }
 
 
@@ -75,7 +56,16 @@ public class Library {
         salesEmployee.forEach((key, value) -> logger.info("Sales of " + key + String.format(" : $ %.2f", value)));
     }
 
+    public void displayBestEmployee(){
+        salesEmployee.entrySet().stream().sorted(Map.Entry.<String, Double>comparingByValue().reversed()).limit(1).forEach(x -> logger.info("Best Employee is: " + x.getKey()));
+    }
 
+    public double sumOfSales(){
+        return salesEmployee.values().stream().mapToDouble(d->d).sum();
+    }
 
+    public void displaySumOfSales(){
+        logger.info("The sum of the sales is " +  String.format(" : $ %.2f", sumOfSales()));
+    }
 
 }

@@ -62,5 +62,7 @@ public class App {
         library.employeeAttend(employee1, customer2);
         library.employeeAttend(employee2, customer3);
         library.displaySalesOfEmployees();
+        library.displayBestEmployee();
+        library.displaySumOfSales();
     }
 }

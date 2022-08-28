@@ -13,8 +13,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 
 
 public final class Employee extends Person implements BiFunction<PaymentMethod, Customer, PaymentMethod>{
@@ -59,10 +59,10 @@ public final class Employee extends Person implements BiFunction<PaymentMethod, 
         }
 
         Publication publicationChosenCustomer = customer.choosePublication(publicationsFound);
-        logger.info("Publication chosen by " + customer.getName() + " is: " + publicationChosenCustomer);
-
+        BiConsumer<Customer, Publication> publicationChosen = (t, p) -> logger.info("Publication chosen by " + customer.getName() + " is: " + publicationChosenCustomer);
+        publicationChosen.accept(customer, publicationChosenCustomer);
         try {
-            customer.increaseBill(publicationChosenCustomer, getCopiesAmount(copies -> copies, customer), apply(PaymentMethod.CASH,customer));
+            customer.increaseBill(publicationChosenCustomer, getCopiesAmount(copies -> copies, customer), apply(PaymentMethod.CASH, customer));
         } catch (InvalidNumberException e) {
             logger.error(e);
             serveCustomer(customer, publications);
