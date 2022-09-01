@@ -63,8 +63,5 @@ public class Reflection {
         newCustomer.setPreferences(Genre.WAR);
 
 
-
-
-
     }
 }

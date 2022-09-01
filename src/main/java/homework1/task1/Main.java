@@ -5,5 +5,6 @@ public class Main {
         System.out.println("test text");
 
         System.out.println("first element = " + args[0]);
+
     }
 }
