@@ -1,11 +1,11 @@
-package homework2.multiThreadingExample;
+package concurrency;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class ConnectionPool {
 
-    public static final int POOL_THREADS = 5;
+    public static final int POOL_THREADS = 6;
     private static ConnectionPool connectionPool;
     private BlockingQueue<Runnable> connections;
     private int connectionsCount;
@@ -45,6 +45,4 @@ public class ConnectionPool {
     public void releaseConnection(Connection connection){
         connections.offer(connection);
     }
-
-
 }

@@ -14,7 +14,7 @@ public class ThreadPool {
     public ThreadPool(int noOfThreads, int maxNoOfTasks){
         taskQueue = new ArrayBlockingQueue(maxNoOfTasks);
 
-        for(int i=0; i<noOfThreads; i++){
+        for(int i=0; i < noOfThreads; i++){
             PoolThreadRunnable poolThreadRunnable =
                     new PoolThreadRunnable(taskQueue);
 
@@ -25,7 +25,7 @@ public class ThreadPool {
         }
     }
 
-    public synchronized void  execute(Runnable task) throws Exception{
+    public synchronized void execute(Runnable task) throws Exception{
         if(this.isStopped) throw
                 new IllegalStateException("ThreadPool is stopped");
 
