@@ -1,4 +1,4 @@
-package homework2.multiThreadingExample;
+package testConcurrency;
 
 public class Connection implements Runnable{
 
@@ -18,12 +18,12 @@ public class Connection implements Runnable{
     }
 
     void connect(){
-        System.out.println("Connecting");
+        System.out.println("Connecting " + name);
         isAvailable = false;
     }
 
     void disconnect(){
-        System.out.println("Disconnecting");
+        System.out.println("Disconnecting " + name);
         isAvailable=true;
     }
 
@@ -38,7 +38,7 @@ public class Connection implements Runnable{
         System.out.println("<<<<< Started run() of " + name);
 
         try {
-                Thread.sleep(5000);
+            Thread.sleep(5000);
         }catch (InterruptedException e){
             e.printStackTrace();
         }

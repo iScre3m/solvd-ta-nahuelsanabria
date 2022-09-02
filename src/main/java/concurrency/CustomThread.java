@@ -12,12 +12,12 @@ public class CustomThread extends Thread{
         return isAvailable;
     }
     void connect(){
-        System.out.println("Connecting");
+        System.out.println("Connecting thread " + name);
         isAvailable = false;
     }
 
     void disconnect(){
-        System.out.println("Disconnecting");
+        System.out.println("Disconnecting thread " + name);
         isAvailable=true;
     }
 

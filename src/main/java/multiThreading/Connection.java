@@ -1,23 +1,22 @@
-package homework2.multiThreading;
+package multiThreading;
 
 import java.util.concurrent.BlockingQueue;
 
-public class PoolThreadRunnable implements Runnable {
+public class Connection implements Runnable {
 
-    private Thread        thread    = null;
+    private Thread thread = null;
     private BlockingQueue taskQueue = null;
-    private boolean       isStopped = false;
+    private boolean isAvailable = false;
 
-    public PoolThreadRunnable(BlockingQueue queue){
+    public Connection(BlockingQueue queue){
         taskQueue = queue;
     }
 
     public void run(){
         this.thread = Thread.currentThread();
-        while(!isStopped()){
+        while(!isAvailable()){
             try{
                 Runnable runnable = (Runnable) taskQueue.take();
-                Thread.sleep(1000);
                 runnable.run();
             } catch(Exception e){
                 //log or otherwise report exception,
@@ -26,13 +25,15 @@ public class PoolThreadRunnable implements Runnable {
         }
     }
 
-    public synchronized void doStop(){
-        isStopped = true;
+    public synchronized void disconnect() throws InterruptedException {
+        isAvailable = true;
         //break pool thread out of dequeue() call.
+        System.out.println("Disconnecting " + thread.getName());
+        Thread.sleep(500);
         this.thread.interrupt();
     }
 
-    public synchronized boolean isStopped(){
-        return isStopped;
+    public synchronized boolean isAvailable(){
+        return isAvailable;
     }
 }

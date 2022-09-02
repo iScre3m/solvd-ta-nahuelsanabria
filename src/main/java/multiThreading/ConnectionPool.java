@@ -1,41 +1,41 @@
-package homework2.multiThreading;
+package multiThreading;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class ThreadPool {
+public class ConnectionPool {
 
     private BlockingQueue taskQueue = null;
-    private List<PoolThreadRunnable> runnables = new ArrayList<>();
+    private List<Connection> connections = new ArrayList<>();
     private boolean isStopped = false;
 
-    public ThreadPool(int noOfThreads, int maxNoOfTasks){
+    public ConnectionPool(int noOfThreads, int maxNoOfTasks){
         taskQueue = new ArrayBlockingQueue(maxNoOfTasks);
 
-        for(int i=0; i < noOfThreads; i++){
-            PoolThreadRunnable poolThreadRunnable =
-                    new PoolThreadRunnable(taskQueue);
+        for(int i=0; i<noOfThreads; i++){
+            Connection connection =
+                    new Connection(taskQueue);
 
-            runnables.add(new PoolThreadRunnable(taskQueue));
+            connections.add(new Connection(taskQueue));
         }
-        for(PoolThreadRunnable runnable : runnables){
+        for(Connection runnable : connections){
             new Thread(runnable).start();
         }
     }
 
-    public synchronized void execute(Runnable task) throws Exception{
+    public synchronized void  execute(Runnable task) throws Exception{
         if(this.isStopped) throw
                 new IllegalStateException("ThreadPool is stopped");
 
         this.taskQueue.offer(task);
     }
 
-    public synchronized void stop(){
+    public synchronized void stop() throws InterruptedException {
         this.isStopped = true;
-        for(PoolThreadRunnable runnable : runnables){
-            runnable.doStop();
+        for(Connection runnable : connections){
+            runnable.disconnect();
         }
     }
 
