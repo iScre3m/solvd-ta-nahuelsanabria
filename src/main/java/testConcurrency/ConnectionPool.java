@@ -5,18 +5,19 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class ConnectionPool {
-    private final int MAX_T = 3;
+    private final int MAX_T = 5;
 
     private static ConnectionPool connectionPool;
-    BlockingQueue<Connection> connections;
+    private BlockingQueue<Runnable> connections;
 
     private int connectionsCount;
 
     public ConnectionPool(){
-        connections = new LinkedBlockingQueue<Connection>(MAX_T);
+        connections = new LinkedBlockingQueue<Runnable>(MAX_T);
     }
 
-    public static ConnectionPool getInstance(){
+
+    public ConnectionPool getInstance(){
         if(connectionPool == null){
             synchronized (ConnectionPool.class){
                 connectionPool = new ConnectionPool();
@@ -28,8 +29,11 @@ public class ConnectionPool {
     private void innitConnection(Connection connection){
         connections.add(connection);
     }
+    public void releaseConnection(Connection connection){
+        connections.offer(connection);
+    }
 
-    public Connection getConnection() throws InterruptedException {
+    public Runnable getConnection() throws InterruptedException {
         System.out.println("Amount of connections: " + (++connectionsCount) + " maximum threads: " + MAX_T);
         if (connections.size()==0 && connectionsCount <= MAX_T){
             synchronized (ConnectionPool.class){
@@ -39,8 +43,17 @@ public class ConnectionPool {
         return connections.take();
     }
 
-    public void releaseConnection(Connection connection){
-        connections.offer(connection);
+
+    public static ConnectionPool getConnectionPool() {
+        return connectionPool;
+    }
+
+    public BlockingQueue<Runnable> getConnections() {
+        return connections;
+    }
+
+    public int getConnectionsCount() {
+        return connectionsCount;
     }
 
 }
