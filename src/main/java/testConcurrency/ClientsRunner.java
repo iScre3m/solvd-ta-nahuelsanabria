@@ -4,17 +4,33 @@ import java.util.concurrent.*;
 
 public class ClientsRunner {
 
-    static final int MAX_T = 5;
+    private static  ConnectionPool connectionPool = new ConnectionPool(5);
+    public static void main(String[] args) throws InterruptedException{
 
-    public static void main(String[] args) throws InterruptedException {
+        final int TPE_MAX_C = 7;
 
+        BlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>(TPE_MAX_C);
 
-        ConnectionPool connectionPool = new ConnectionPool();
-        BlockingQueue<Runnable> pool = connectionPool.getConnections();
-
-        ThreadPoolExecutor executor1 = new ThreadPoolExecutor(MAX_T, MAX_T, 4000, TimeUnit.MILLISECONDS, pool);
-        for (int i = 0; i < 7; i++) {
-            Runnable connection = new Connection("" + (i+1));
+        ThreadPoolExecutor executor1 = new ThreadPoolExecutor(TPE_MAX_C, TPE_MAX_C, 4, TimeUnit.SECONDS, queue);
+        for (int i = 0; i < TPE_MAX_C; i++) {
+            Runnable connection = new Runnable() {
+                @Override
+                public void run() {
+                    try{
+                        Connection connection = connectionPool.getConnection();
+                        connection.connect();
+                        try{
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        connection.disconnect();
+                        connectionPool.releaseConnection(connection);
+                    }catch (RuntimeException e){
+                        System.err.println(e.getMessage());
+                    }
+                }
+            };
             executor1.execute(connection);
         }
         executor1.shutdown();
@@ -22,21 +38,5 @@ public class ClientsRunner {
 
         }
         System.out.println("Finished all threads");
-
-
-
-        // replace new LinkedBlockingQueue with ConnectionPool ??
-//        ThreadPoolExecutor executor2 = new ThreadPoolExecutor(MAX_T, MAX_T, 4000, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
-//        for (int i = 0; i < 7; i++) {
-//            Runnable connection = new Connection("" + (i+1));
-//            executor2.execute(connection);
-//        }
-//        executor2.shutdown();
-//        while (!executor2.isTerminated()){
-//
-//        }
-//        System.out.println("Finished all threads");
-
-
     }
 }

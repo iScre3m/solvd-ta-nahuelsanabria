@@ -1,12 +1,19 @@
 package testConcurrency;
 
-public class Connection implements Runnable{
+import homework2.App;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public class Connection{
+
+    final Logger LOG = LogManager.getLogger(Connection.class.getName());
 
     private final String name;
     private boolean isAvailable;
 
     public Connection(String name){
         this.name = name;
+        LOG.info("Connection was created: " + name);
     }
 
     public String getName() {
@@ -18,33 +25,12 @@ public class Connection implements Runnable{
     }
 
     void connect(){
-        System.out.println("Connecting " + name);
+        LOG.info("Connecting " + name);
         isAvailable = false;
     }
 
     void disconnect(){
-        System.out.println("Disconnecting " + name);
+        LOG.info("Disconnecting " + name);
         isAvailable=true;
-    }
-
-
-    @Override
-    public void run() {
-        String myConnection = "Connection";
-
-        connect();
-
-        System.out.println(name + " uses " + myConnection);
-        System.out.println("<<<<< Started run() of " + name);
-
-        try {
-            Thread.sleep(5000);
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }
-
-        System.out.println("<<<<< Finished run() of " + name);
-
-        disconnect();
     }
 }

@@ -1,59 +1,58 @@
 package testConcurrency;
 
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import java.util.Vector;
 
-public class ConnectionPool {
-    private final int MAX_T = 5;
 
+
+public class ConnectionPool{
+    final Logger LOG = LogManager.getLogger(ConnectionPool.class.getName());
+    private int size;
     private static ConnectionPool connectionPool;
-    private BlockingQueue<Runnable> connections;
+    private Vector<Connection> connections;
 
-    private int connectionsCount;
-
-    public ConnectionPool(){
-        connections = new LinkedBlockingQueue<Runnable>(MAX_T);
-    }
-
-
-    public ConnectionPool getInstance(){
-        if(connectionPool == null){
-            synchronized (ConnectionPool.class){
-                connectionPool = new ConnectionPool();
-            }
-        }
-        return connectionPool;
+    public ConnectionPool(int size){
+        this.size = size;
+        connections = new Vector<Connection>();
     }
 
     private void innitConnection(Connection connection){
         connections.add(connection);
     }
     public void releaseConnection(Connection connection){
-        connections.offer(connection);
+        connections.remove(connection);
     }
 
-    public Runnable getConnection() throws InterruptedException {
-        System.out.println("Amount of connections: " + (++connectionsCount) + " maximum threads: " + MAX_T);
-        if (connections.size()==0 && connectionsCount <= MAX_T){
-            synchronized (ConnectionPool.class){
-                    innitConnection(new Connection("Thread"+(connectionsCount)));
+    public synchronized Connection getConnection(){
+        Connection connection = null;
+        if (connections.size() < size){
+            connection = new Connection("Thread#" + (connections.size()+1));
+            innitConnection(connection);
+            return connection;
+            }
+        else {
+            LOG.info("There are no free slots, connection requests will get to queue...");
+            int maxAttemptsCount = 10;
+            while(maxAttemptsCount-- > 0){
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                if (connections.size() < size){
+                    connection = new Connection("Thread#" + (connections.size()+1));
+                    innitConnection(connection);
+                    return connection;
                 }
             }
-        return connections.take();
+            throw new RuntimeException("No connections available after 10 seconds");
+        }
     }
-
 
     public static ConnectionPool getConnectionPool() {
         return connectionPool;
-    }
-
-    public BlockingQueue<Runnable> getConnections() {
-        return connections;
-    }
-
-    public int getConnectionsCount() {
-        return connectionsCount;
     }
 
 }

@@ -39,5 +39,7 @@ public class CustomThread extends Thread{
         System.out.println("<<<<< Finished run() of " + name);
 
         disconnect();
+
+
     }
 }
