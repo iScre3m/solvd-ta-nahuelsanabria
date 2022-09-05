@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Connection{
 
-    final Logger LOG = LogManager.getLogger(Connection.class.getName());
+    final Logger LOG = LogManager.getLogger(Connection.class.getSimpleName());
 
     private final String name;
     private boolean isAvailable;

@@ -8,7 +8,7 @@ import java.util.Vector;
 
 
 public class ConnectionPool{
-    final Logger LOG = LogManager.getLogger(ConnectionPool.class.getName());
+    final Logger LOG = LogManager.getLogger(ConnectionPool.class.getSimpleName());
     private int size;
     private static ConnectionPool connectionPool;
     private Vector<Connection> connections;
@@ -28,7 +28,7 @@ public class ConnectionPool{
     public synchronized Connection getConnection(){
         Connection connection = null;
         if (connections.size() < size){
-            connection = new Connection("Thread#" + (connections.size()+1));
+            connection = new Connection("Thread#" + (Thread.currentThread().getId() % size + 1));
             innitConnection(connection);
             return connection;
             }
@@ -42,7 +42,7 @@ public class ConnectionPool{
                     throw new RuntimeException(e);
                 }
                 if (connections.size() < size){
-                    connection = new Connection("Thread#" + (connections.size()+1));
+                    connection = new Connection("Thread#" + (Thread.currentThread().getId() % 5 + 1));
                     innitConnection(connection);
                     return connection;
                 }
@@ -54,6 +54,7 @@ public class ConnectionPool{
     public static ConnectionPool getConnectionPool() {
         return connectionPool;
     }
+
 
 }
 
