@@ -26,9 +26,9 @@ public class ConnectionPool{
     }
 
     public synchronized Connection getConnection(){
-        Connection connection = null;
+        Connection connection;
         if (connections.size() < size){
-            connection = new Connection("Thread#" + (Thread.currentThread().getId() % size + 1));
+            connection = new Connection("Thread#" + (Thread.currentThread().getId() % size));
             innitConnection(connection);
             return connection;
             }
@@ -42,7 +42,7 @@ public class ConnectionPool{
                     throw new RuntimeException(e);
                 }
                 if (connections.size() < size){
-                    connection = new Connection("Thread#" + (Thread.currentThread().getId() % 5 + 1));
+                    connection = new Connection("Thread#" + (Thread.currentThread().getId() % size));
                     innitConnection(connection);
                     return connection;
                 }
@@ -50,11 +50,6 @@ public class ConnectionPool{
             throw new RuntimeException("No connections available after 10 seconds");
         }
     }
-
-    public static ConnectionPool getConnectionPool() {
-        return connectionPool;
-    }
-
 
 }
 

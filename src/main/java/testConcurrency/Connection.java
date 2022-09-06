@@ -13,11 +13,6 @@ public class Connection{
 
     public Connection(String name){
         this.name = name;
-        LOG.info("Connection was created: " + name);
-    }
-
-    public String getName() {
-        return name;
     }
 
     public boolean isAvailable() {
@@ -25,12 +20,12 @@ public class Connection{
     }
 
     void connect(){
-        LOG.info("Connecting " + name);
+        LOG.info("Connecting");
         isAvailable = false;
     }
 
     void disconnect(){
-        LOG.info("Disconnecting " + name);
+        LOG.info("Disconnecting");
         isAvailable=true;
     }
 }

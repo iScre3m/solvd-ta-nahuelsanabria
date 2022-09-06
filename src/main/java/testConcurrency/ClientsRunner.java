@@ -1,50 +1,40 @@
 package testConcurrency;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.concurrent.*;
 
 public class ClientsRunner {
 
     private static  ConnectionPool connectionPool = new ConnectionPool(5);
 
+    static final int TPE_MAX_C = 5;
 
-    public static void main(String[] args) throws InterruptedException{
+    static final Logger LOG = LogManager.getLogger(Connection.class.getSimpleName());
 
-        final int TPE_MAX_C = 5;
+
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+
 
         BlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>(TPE_MAX_C);
 
         ThreadPoolExecutor executor1 = new ThreadPoolExecutor(TPE_MAX_C, TPE_MAX_C, 4, TimeUnit.SECONDS, queue);
-        for (int i = 0; i < TPE_MAX_C; i++) {
-            executor1.execute(() -> {
-                    try{
-                        Connection connection = connectionPool.getConnection();
-                        connection.connect();
-                        try{
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        connection.disconnect();
-                        connectionPool.releaseConnection(connection);
-                    }catch (RuntimeException e){
-                        System.err.println(e.getMessage());
-                    }
-            });
-        }
 
         ClientsRunner clientsRunner = new ClientsRunner();
 
-        ClientsRunner.RunnerTask runnerTask = clientsRunner.new RunnerTask();
-        ClientsRunner.RunnerTaskThread runnerTaskThread = clientsRunner.new RunnerTaskThread();
 
-        executor1.execute(runnerTask);
-        executor1.execute(runnerTaskThread);
 
-        executor1.shutdown();
-        while (!executor1.isTerminated()){
+        CompletableFuture<Void> future = CompletableFuture.runAsync(()->PoolTask(executor1));
+        CompletableFuture<Void> futureRunner = CompletableFuture.runAsync(clientsRunner.new RunnerTask(), executor1);
+        futureRunner.join();
+        CompletableFuture<Void> futureRunnerTaskThread = CompletableFuture.runAsync(clientsRunner.new RunnerTaskThread(), executor1);
+        futureRunnerTaskThread.join();
 
-        }
-        System.out.println("Finished all threads");
+
+        future.whenComplete((x,y)-> executor1.shutdown()).thenRun(()-> LOG.info("Finished all threads"));
+
+
     }
 
     class RunnerTask implements Runnable{
@@ -80,6 +70,27 @@ public class ClientsRunner {
             }catch (RuntimeException e){
                 System.err.println(e.getMessage());
             }
+        }
+    }
+
+    public static void PoolTask(ThreadPoolExecutor executor1){
+        for (int i = 0; i < TPE_MAX_C; i++)
+        {
+            executor1.execute(() -> {
+                    try{
+                        Connection connection = connectionPool.getConnection();
+                        connection.connect();
+                        try{
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        connection.disconnect();
+                        connectionPool.releaseConnection(connection);
+                    }catch (RuntimeException e){
+                        System.err.println(e.getMessage());
+                    }
+            });
         }
     }
 }

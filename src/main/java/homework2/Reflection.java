@@ -8,7 +8,7 @@ import java.lang.reflect.*;
 public class Reflection {
     public static void main(String[] args) {
 
-        Class reflectClass = Customer.class;
+        Class<Customer> reflectClass = Customer.class;
 
         String className = reflectClass.getName();
 
@@ -18,7 +18,7 @@ public class Reflection {
 
         System.out.println("classModifiers = " + Modifier.isPublic(classModifiers));
 
-        Class classSuper = reflectClass.getSuperclass();
+        Class<? super Customer> classSuper = reflectClass.getSuperclass();
 
         System.out.println("classSuper = " + classSuper);
 
@@ -38,7 +38,7 @@ public class Reflection {
         Constructor constructor = null;
 
         try {
-            constructor = reflectClass.getConstructor(new Class[]{String.class, Genre.class});
+            constructor = reflectClass.getConstructor(String.class, Genre.class);
 
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
@@ -52,11 +52,7 @@ public class Reflection {
 
         try {
             newCustomer = (Customer) constructor.newInstance(name, genre);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
+        } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
 
