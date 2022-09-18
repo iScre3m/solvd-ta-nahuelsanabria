@@ -18,8 +18,16 @@ public class Library {
     private final List<Publication> publications = new Vector<>();
     private List<Publication> largestPublications = new ArrayList<>();
     private final HashMap<String, Double> salesEmployee = new HashMap<>();
+
+    private final List<Employee> employees = new ArrayList<>();
+
     public void addPublication(Publication publication){
         publications.add(publication);
+    }
+    public void addEmployee(String name){employees.add(new Employee(name));}
+
+    public Employee getEmployee(){
+        return employees.get(new Random().nextInt(employees.size()));
     }
 
     public void createLargestPublications(){
@@ -30,6 +38,7 @@ public class Library {
     }
 
     public void employeeAttend(Employee employee, Customer customer){
+        employee.greet(customer);
         salesEmployee.putIfAbsent(employee.getName(), 0.0);
         employee.serveCustomer(customer, publications);
         salesEmployee.computeIfPresent(employee.getName(), (k,v) -> v + customer.getBill());
