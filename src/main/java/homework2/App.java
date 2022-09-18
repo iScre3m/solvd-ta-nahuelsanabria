@@ -22,8 +22,6 @@ public class App {
         Book book3 = new Book("The Hacienda", "Isabel Cañas", 357, true, Genre.MYSTERY, "Thought is the only life, the only guarantee totally");
         Pamphlet pamphlet1 = new Pamphlet("Rehab", 3, true, Genre.RELIGION, "We take your problems seriously, come to our classes");
         ComicBook comicBook1 = new ComicBook("Flash", "DC Comics", 30, true, Genre.FANTASY, "Sorry I am late, th-there is hope, Time to save the world");
-//        Employee employee1 = new Employee("Olga");
-//        Employee employee2 = new Employee("Martin");
         Customer customer1 = new Customer("Charles", Genre.WAR);
         Customer customer2 = new Customer("Robin", Genre.MYSTERY);
         Customer customer3 = new Customer("Matthew", Genre.FANTASY);
